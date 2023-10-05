@@ -21,7 +21,7 @@ jobs:
       run: |
         echo -n `date +%Y-%m-%d\ %H:%M:%S`\ -\ >> ./run.log
         response=$(curl -X GET 'https://api.sockboom.click/client/checkin?token=${{  secrets.SOCKBOOM_TOKEN }}')
-        checkin_success $(echo $response | jq -r '.success')
+        checkin_success=$(echo $response | jq -r '.success')
         traffic=$(echo $response | jq -r '.traffic')
         if [ "$checkin_success" != "1" ]; then
           $traffic='0'
