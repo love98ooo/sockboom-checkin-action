@@ -30,6 +30,8 @@ jobs:
         tail run.log #避免日志上传失败丢失日志
         # fi
         # echo "CHECKIN_SUCCCESS=$checkin_success" >> "$GITHUB_ENV"
+      env:
+          SOCKBOOM_TOKEN: ${{ secrets.SOCKBOOM_TOKEN }}
     - name: Commit #上传日志到仓库，可以自行修改 name 和 email
       env:
        NAME: sockboom-action
