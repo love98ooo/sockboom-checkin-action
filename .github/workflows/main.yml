@@ -28,7 +28,7 @@ jobs:
         echo "SOCKBOOM_TOKEN=$sockboom_token" >> "$GITHUB_ENV"
         echo "SOCKBOOM_SUCCESS=$sockboom_success" >> "$GITHUB_ENV"
     - name: Chick in Api #签到
-      if: env.SOCKBOOM_SUCCESS == "1"
+      if: env.SOCKBOOM_SUCCESS == '1'
       run: |
         echo -n `date +%Y-%m-%d\ %H:%M:%S`\ -\ >> ./run.log
         response = $(curl -X GET 'https://api.sockboom.click/client/checkin?token=$SOCKBOOM_TOKEN')
