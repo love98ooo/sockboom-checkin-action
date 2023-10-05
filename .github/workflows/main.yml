@@ -1,9 +1,9 @@
 name: 'SockBoom Checkin Action'
 
 on: 
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   schedule:
     - cron: '0 23 * * *'
 
@@ -28,6 +28,7 @@ jobs:
         fi
         echo "Get $traffic bit" >> ./run.log
         tail run.log #避免日志上传失败丢失日志
+        echo ("TRAFFIC"=$traffic) >> "$GITHUB_ENV"
       env:
           SOCKBOOM_TOKEN: ${{ secrets.SOCKBOOM_TOKEN }}
     - name: Commit #上传日志到仓库，可以自行修改 name 和 email
@@ -38,7 +39,7 @@ jobs:
         git config --global user.name "$NAME"
         git config --global user.email "$EMAIL"
         git add .
-        git commit -m "update log" -a
+        git commit -m "Get ${{  env.TRAFFIC  }} bit" -a
     - name: Push log
       uses: ad-m/github-push-action@master
       with:
