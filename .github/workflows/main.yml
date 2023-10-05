@@ -22,12 +22,24 @@ jobs:
         EMAIL: ${{ secrets.EMAIL }}
         PASSWORD: ${{ secrets.PASSWORD }}
       run: |
-        echo -en $(curl -c cookie.txt -X POST 'https://api.sockboom.click/client/getToken' -d email="$EMAIL" -d passwd="$PASSWORD")
+        response = $(curl -X POST 'https://api.sockboom.click/client/getToken' -d email="$EMAIL" -d passwd="$PASSWORD")
+        sockboom_token = $(echo $response | jq -r '.token')
+        sockboom_success = $(echo $response | jq -r '.success')
+        echo "SOCKBOOM_TOKEN=$sockboom_token" >> "$GITHUB_ENV"
+        echo "SOCKBOOM_SUCCESS=$sockboom_success" >> "$GITHUB_ENV"
     - name: Chick in Api #签到
+      if: env.SOCKBOOM_SUCCESS == "1"
       run: |
         echo -n `date +%Y-%m-%d\ %H:%M:%S`\ -\ >> ./run.log
-        echo -e $(curl -b cookie.txt -X GET 'https://api.sockboom.click/client/checkin')  >> ./run.log
+        response = $(curl -X GET 'https://api.sockboom.click/client/checkin?token=$SOCKBOOM_TOKEN')
+        # checkin_success = $(echo $response | jq -r '.success')
+        # if [ "$checkin_success" == "1" ]; then
+        traffic = $(echo $response | jq -r '.traffic')
+        echo -n `date +%Y-%m-%d\ %H:%M:%S`\ -\ >> ./run.log
+        echo "$traffic bit" >> ./run.log
         tail run.log #避免日志上传失败丢失日志
+        # fi
+        # echo "CHECKIN_SUCCCESS=$checkin_success" >> "$GITHUB_ENV"
     - name: Commit #上传日志到仓库，可以自行修改 name 和 email
       env:
        NAME: sockboom-action
