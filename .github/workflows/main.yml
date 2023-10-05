@@ -24,7 +24,7 @@ jobs:
         checkin_success=$(echo $response | jq -r '.success')
         traffic=$(echo $response | jq -r '.traffic')
         if [ "$checkin_success" != "1" ]; then
-          $traffic='0'
+          $traffic="0"
         fi
         echo "Get $traffic bit" >> ./run.log
         tail run.log #避免日志上传失败丢失日志
