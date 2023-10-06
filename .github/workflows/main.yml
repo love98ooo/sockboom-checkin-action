@@ -25,7 +25,7 @@ jobs:
         traffic_bit=$(echo $response | jq -r '.traffic')
         conversion_factor=1.24e7
         if [ "$checkin_success" != "1" ]; then
-          traffic="0"
+          traffic_bit="0"
         fi
         traffic=$(echo "scale=2; $traffic_bit * $conversion_factor" | bc)
         echo "Get $traffic MB" >> ./run.log
