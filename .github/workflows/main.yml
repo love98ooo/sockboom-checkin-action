@@ -22,11 +22,13 @@ jobs:
         echo -n `date +%Y-%m-%d\ %H:%M:%S`\ -\ >> ./run.log
         response=$(curl -X GET 'https://api.sockboom.click/client/checkin?token=${{  secrets.SOCKBOOM_TOKEN }}')
         checkin_success=$(echo $response | jq -r '.success')
-        traffic=$(echo $response | jq -r '.traffic')
+        traffic_bit=$(echo $response | jq -r '.traffic')
+        conversion_factor=1.24e7
         if [ "$checkin_success" != "1" ]; then
           traffic="0"
         fi
-        echo "Get $traffic bit" >> ./run.log
+        traffic=$(echo "scale=2; $traffic_bit * $conversion_factor" | bc)
+        echo "Get $traffic MB" >> ./run.log
         tail run.log #避免日志上传失败丢失日志
         echo "TRAFFIC"=$traffic >> "$GITHUB_ENV"
       env:
@@ -39,7 +41,7 @@ jobs:
         git config --global user.name "$NAME"
         git config --global user.email "$EMAIL"
         git add .
-        git commit -m "Get ${{  env.TRAFFIC  }} bit" -a
+        git commit -m "Get ${{  env.TRAFFIC  }} MB" -a
     - name: Push log
       uses: ad-m/github-push-action@master
       with:
