@@ -27,6 +27,7 @@ jobs:
         if [ "$checkin_success" != "1" ]; then
           traffic_bit="0"
         fi
+        echo $traffic_bit
         traffic=$(echo "scale=2; $traffic_bit * $conversion_factor" | bc)
         echo "Get $traffic MB" >> ./run.log
         tail run.log #避免日志上传失败丢失日志
