@@ -28,7 +28,7 @@ jobs:
           traffic_bit="0"
         fi
         # traffic=$traffic_bit * $conversion_factor
-        traffic=$(echo "$traffic_bit*$conversion_factor"|bc)
+        traffic=$(echo "${{ traffic_bit }}*${{ conversion_factor }}"|bc)
         # traffic=$(echo "scale=2; $traffic_bit \* $conversion_factor" | bc)
         echo "Get $traffic MB" >> ./run.log
         tail run.log #避免日志上传失败丢失日志
