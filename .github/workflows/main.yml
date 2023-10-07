@@ -28,6 +28,7 @@ jobs:
           traffic_bit="0"
         fi
         # traffic=$traffic_bit * $conversion_factor
+        echo $traffic_bit
         traffic=$(awk 'BEGIN{print $traffic_bit/$conversion_factor }')
         # traffic=$(echo "scale=2; $traffic_bit \* $conversion_factor" | bc)
         echo "Get $traffic MB" >> ./run.log
