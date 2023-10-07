@@ -1,9 +1,9 @@
 name: 'SockBoom Checkin Action'
 
 on: 
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   schedule:
     - cron: '0 23 * * *'
 
@@ -23,12 +23,12 @@ jobs:
         response=$(curl -X GET 'https://api.sockboom.click/client/checkin?token=${{  secrets.SOCKBOOM_TOKEN }}')
         checkin_success=$(echo $response | jq -r '.success')
         traffic_bit=$(echo $response | jq -r '.traffic')
-        conversion_factor=1.24e7
+        conversion_factor=8388608
         if [ "$checkin_success" != "1" ]; then
           traffic_bit="0"
         fi
         # traffic=$traffic_bit * $conversion_factor
-        traffic=$(awk 'BEGIN{print $traffic_bit*$conversion_factor }')
+        traffic=$(awk 'BEGIN{print $traffic_bit/$conversion_factor }')
         # traffic=$(echo "scale=2; $traffic_bit \* $conversion_factor" | bc)
         echo "Get $traffic MB" >> ./run.log
         tail run.log #避免日志上传失败丢失日志
