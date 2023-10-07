@@ -1,9 +1,9 @@
 name: 'SockBoom Checkin Action'
 
 on: 
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   schedule:
     - cron: '0 23 * * *'
 
@@ -17,7 +17,7 @@ jobs:
         timezone: Asia/Shanghai
     - name: Get log
       uses: actions/checkout@master
-    - name: Chick in
+    - name: Ckeck in
       run: |
         echo -n `date +%Y-%m-%d\ %H:%M:%S`\ -\ >> ./run.log
         response=$(curl -X GET 'https://api.sockboom.click/client/checkin?token=${{  secrets.SOCKBOOM_TOKEN }}')
