@@ -23,7 +23,7 @@ jobs:
         response=$(curl -X GET 'https://api.sockboom.click/client/checkin?token=${{  secrets.SOCKBOOM_TOKEN }}')
         checkin_success=$(echo $response | jq -r '.success')
         traffic_bit=$(echo $response | jq -r '.traffic')
-        conversion_factor=8388608
+        conversion_factor="8388608"
         if [ "$checkin_success" != "1" ]; then
           traffic_bit="0"
         fi
