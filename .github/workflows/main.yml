@@ -24,7 +24,7 @@ jobs:
         checkin_success=$(echo $response | jq -r '.success')
         traffic_bit=$(echo $response | jq -r '.traffic')
         echo $traffic_bit
-        conversion_factor="8388608"
+        conversion_factor="8000000"
         traffic="0"
         if [ "$checkin_success" == "1" ]; then
           traffic=$(echo "scale=2; $traffic_bit / $conversion_factor" | bc)
